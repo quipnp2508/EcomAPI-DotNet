@@ -16,12 +16,12 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<PagedResult<Product>> GetAllAsync(
-            int page,
-            int pageSize,
-            string? search,
-            decimal? minPrice,
-            decimal? maxPrice)
+        public async Task<PagedResult<ProductResponse>> GetAllAsync(
+             int page,
+             int pageSize,
+             string? search,
+             decimal? minPrice,
+             decimal? maxPrice)
         {
             IQueryable<Product> query = _unitOfWork.Products
                 .Query()
@@ -42,9 +42,18 @@
                 .OrderBy(x => x.Name)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .Select(x => new ProductResponse
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    Price = x.Price,
+                    Stock = x.Stock,
+                    CategoryName = x.Category.Name
+                })
                 .ToListAsync();
 
-            return new PagedResult<Product>
+            return new PagedResult<ProductResponse>
             {
                 Items = items,
                 Page = page,

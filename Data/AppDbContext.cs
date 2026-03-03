@@ -1,6 +1,5 @@
 ﻿using EComAPI.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 namespace EComAPI.Data
 {
     public class AppDbContext : DbContext
@@ -14,7 +13,9 @@ namespace EComAPI.Data
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasPrecision(18, 2);
-
+            modelBuilder.Entity<User>()
+                .Property(u => u.Id)
+                .HasDefaultValueSql("NEWID()");
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<User> Users { get; set; }

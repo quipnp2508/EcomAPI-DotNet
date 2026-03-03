@@ -42,13 +42,13 @@
 
             var user = new User
             {
+                Id = Guid.NewGuid(),
                 Email = request.Email,
                 PasswordHash = BCrypt.HashPassword(request.Password),
                 Role = "User"
             };
 
             await _unitOfWork.Users.AddAsync(user);
-            await _unitOfWork.SaveChangesAsync();
 
             var accessToken = GenerateJwtToken(user);
             var rawRefreshToken = GenerateRefreshToken();
@@ -63,6 +63,7 @@
 
             await _unitOfWork.RefreshTokens.AddAsync(refreshToken);
             await _unitOfWork.SaveChangesAsync();
+            
 
             return new AuthResponse
             {

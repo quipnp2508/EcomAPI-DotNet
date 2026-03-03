@@ -6,7 +6,7 @@ namespace EComAPI.Services.Interfaces
 {
     public interface IProductService
     {
-        Task<PagedResult<Product>> GetAllAsync(
+        Task<PagedResult<ProductResponse>> GetAllAsync(
             int page,
             int pageSize,
             string? search,
