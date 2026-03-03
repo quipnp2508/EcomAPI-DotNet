@@ -24,6 +24,8 @@ namespace EComAPI.Repositories
             Categories = new GenericRepository<Category>(context);
             Orders = new GenericRepository<Order>(context);
             CartItems = new GenericRepository<CartItem>(context);
+            Users = new GenericRepository<User>(context);
+            RefreshTokens = new GenericRepository<RefreshToken>(context);
         }
 
         public async Task<int> SaveChangesAsync()
