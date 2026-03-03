@@ -12,6 +12,8 @@ namespace EComAPI.Entities
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public bool IsDeleted { get; set; } = false;
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
     }
