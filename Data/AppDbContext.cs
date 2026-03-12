@@ -13,9 +13,27 @@ namespace EComAPI.Data
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasPrecision(18, 2);
-            modelBuilder.Entity<User>()
-                .Property(u => u.Id)
-                .HasDefaultValueSql("NEWID()");
+
+            modelBuilder.Entity<Product>()
+                .HasIndex(x => x.Name);
+
+            modelBuilder.Entity<Product>()
+                .HasIndex(x => x.Price);
+
+            modelBuilder.Entity<Product>()
+                .HasIndex(x => x.CategoryId);
+
+            modelBuilder.Entity<Category>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Order>()
+                .HasIndex(x => x.UserId);
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
+
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<User> Users { get; set; }

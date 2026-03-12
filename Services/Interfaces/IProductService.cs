@@ -13,7 +13,7 @@ namespace EComAPI.Services.Interfaces
             decimal? minPrice,
             decimal? maxPrice);
 
-        Task<Product> GetByIdAsync(Guid id);
+        Task<ProductResponse?> GetByIdAsync(Guid id);
 
         Task<Guid> CreateAsync(CreateProductRequest request);
 

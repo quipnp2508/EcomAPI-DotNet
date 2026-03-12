@@ -25,10 +25,10 @@
         {
             IQueryable<Product> query = _unitOfWork.Products
                 .Query()
-                .Include(x => x.Category);
+                .AsNoTracking();
 
-            if (!string.IsNullOrEmpty(search))
-                query = query.Where(x => x.Name.Contains(search));
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(x => x.Name.StartsWith(search));
 
             if (minPrice.HasValue)
                 query = query.Where(x => x.Price >= minPrice.Value);
@@ -62,17 +62,22 @@
             };
         }
 
-        public async Task<Product> GetByIdAsync(Guid id)
+        public async Task<ProductResponse?> GetByIdAsync(Guid id)
         {
-            var product = await _unitOfWork.Products
+            return await _unitOfWork.Products
                 .Query()
-                .Include(x => x.Category)
-                .FirstOrDefaultAsync(x => x.Id == id);
-
-            if (product == null)
-                throw new Exception("Product not found");
-
-            return product;
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Select(x => new ProductResponse
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    Price = x.Price,
+                    Stock = x.Stock,
+                    CategoryName = x.Category.Name
+                })
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Guid> CreateAsync(CreateProductRequest request)

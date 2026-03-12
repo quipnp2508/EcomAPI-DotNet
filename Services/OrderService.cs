@@ -88,8 +88,6 @@ namespace EComAPI.Services
                 .Query()
                 .Where(x => x.UserId == userId)
                 .AsNoTracking()
-                .Include(x => x.OrderItems)
-                    .ThenInclude(x => x.Product)
                 .Select(x => new OrderResponse
                 {
                     Id = x.Id,

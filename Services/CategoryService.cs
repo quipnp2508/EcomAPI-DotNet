@@ -18,7 +18,9 @@
         public async Task<IEnumerable<CategoryResponse>> GetAllAsync()
         {
             return await _unitOfWork.Categories
-                .Query().AsNoTracking()
+                .Query()
+                .AsNoTracking()
+                .OrderBy(x => x.Name)
                 .Select(x => new CategoryResponse
                 {
                     Id = x.Id,
@@ -33,6 +35,13 @@
             {
                 Name = request.Name
             };
+
+            var exists = await _unitOfWork.Categories
+                .Query()
+                .AnyAsync(x => x.Name == request.Name);
+
+            if (exists)
+                throw new Exception("Category already exists");
 
             await _unitOfWork.Categories.AddAsync(category);
             await _unitOfWork.SaveChangesAsync();
